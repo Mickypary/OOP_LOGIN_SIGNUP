@@ -39,7 +39,7 @@ class DB
 		return self::$instance;
 	}
 
-	protected function run($values = array())
+	public function run($values = array())
 	{
 		$stm = self::$con->prepare($this->query);
 		$check = $stm->execute($values);
@@ -113,6 +113,37 @@ class DB
 		return self::$instance;
 	}
 
+	public function insert(array $values)
+	{
+
+		$this->query_type = "insert";
+		$this->query = "INSERT INTO " . self::$table . " (";
+
+		// add the columns
+		foreach ($values as $key => $value) {
+			
+			$this->query .= $key . ",";
+		}
+		// trim the last comma
+		$this->query = trim($this->query, ",");
+		$this->query .= ") VALUES ( ";	
+
+		// add the values
+		foreach ($values as $key => $value) {
+			
+			$this->query .= " :" . $key . ",";
+		}
+		// trim the last comma
+		$this->query = trim($this->query, ",");
+		$this->query .= ")";
+		
+		// print_r($this->query);
+
+		$this->values = $values;
+
+		return self::$instance;
+	}
+
 	public function update(array $values)
 	{
 		$this->query_type = "update";
@@ -130,9 +161,20 @@ class DB
 		return self::$instance;
 	}
 
-	public function query($query, $value = array())
+	public function query($query, $values = array())
 	{
-		// code...
+		$stm = self::$con->prepare($query);
+		$check = $stm->execute($values);
+		if ($check) {
+			
+			$data = $stm->fetchAll(PDO::FETCH_OBJ);
+			if (is_array($data) && count($data) > 0) {
+				
+				return $data;;
+			}
+		}
+
+		return false;
 	}
 
 

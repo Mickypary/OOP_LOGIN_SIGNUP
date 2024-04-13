@@ -22,9 +22,45 @@ class User
 		return self::$instance;
 	}
 
-	public function create($value='')
+	public function create($POST)
 	{
-		// code...
+		$errors = array();
+
+		$arr['username'] = ucwords(trim($POST['username']));
+		$arr['email'] = trim($POST['email']);
+		$arr['password'] = $POST['password'];
+		$arr['gender'] = trim($POST['gender']);
+		$arr['date'] = date("Y-m-d H:i:s");
+
+		// validation
+		if (empty($arr['username']) || !preg_match("/^[a-zA-Z ]$/", $arr['username'])) {
+			
+			$errors[] = "Username can only have letters and spaces";
+		}
+
+
+		if (!filter_var($arr['email'], FILTER_VALIDATE_EMAIL)) {
+					
+			$errors[] = "Please enter a valid email";
+		}
+
+		if ($arr['gender'] != "--Select Gender--" || ($arr['gender'] != "Female" && $arr['gender'] != "Male")) {
+							
+			$errors[] = "Please enter a valid gender";
+		}
+
+
+		// save to database
+		if (count($errors) == 0) {
+			
+			return DB::table('users')->insert($arr)->run($arr);
+		}
+		echo "error";
+		return $errors;
+
+
+
+
 	}
 
 	public function update_by_id($values, $id)
@@ -37,22 +73,23 @@ class User
 		return DB::table('users')->select()->all();
 	}
 
-	// public function get_by_id($id)
-	// {
-	// 	return DB::table('users')->select()->where("id = :id",["id" => $id]);
-	// }
-
-	// public function get_by_email($email)
-	// {
-	// 	return DB::table('users')->select()->where("email = :email",["email" => $email]);
-	// }
-
 	public function __call($method, $param)
 	{
 		$value = $param[0];
 		$column = str_replace("get_by_", "", $method);
 		$column = addslashes($column);
-		return DB::table('users')->select()->where($column . "= :".$column,[$column => $value ]);
+
+		// check if column exist
+		$check = DB::table('users')->query('show columns from users');
+		echo "<pre>";
+		$all_columns = array_column($check, "Field");
+		if (in_array($column, $all_columns)) {
+			
+			return DB::table('users')->select()->where($column . "= :".$column,[$column => $value ]);
+		}
+
+		return false;
+		
 	}
 
 
