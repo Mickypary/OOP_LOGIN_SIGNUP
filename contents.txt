@@ -1,0 +1,22 @@
+================   Course Title: OOP (Object Oriented Programming) PHP Basic  ========================
+
+
+
+============ Advantage of OOP over Procedural =========
+1. Code reusabilty
+2. Class entity to contain many function
+
+
+
+
+Four Principles of OOP
+1. Encapsulation = holds things together
+2. Abstraction = abstract, to be less specific
+3. Inheritance = copying some functionality
+4. Polymorphism = poly means many, morph means forms, i.e many forms, one function can work differently depending on the situation
+
+
+
+
+
+Class Instantiation
