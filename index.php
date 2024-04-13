@@ -2,15 +2,29 @@
 
 include 'init.php';
 
-// $array['username'] = "jimoh";
-// $array['password'] = "12345";
-// $array['email'] = "jimoh@yahoo.com";
-// $array['gender'] = "Male";
-// $array['date'] = "";
-// User::action()->create($array);
-// $data = User::action()->get_by_gender('male');
 $user = new User();
-$data = $user->action()->get_all();
+if (!$answer = $user->is_logged_in()) {
+	
+	header("Location: login.php");
+		die();
+}
+var_dump($answer);
 
-echo "<pre>";
-print_r($data);
+?>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Home Page</title>
+</head>
+<body>
+
+	<center>Home Page</center>
+	<header><a href="">Home</a> . <a href="">Shop</a> . <a href="logout.php">Logout</a> . <a href="login.php">Login</a> </header>
+
+
+</body>
+</html>

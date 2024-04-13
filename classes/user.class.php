@@ -76,13 +76,18 @@ class User
 		$data =  DB::table('users')->select()->where("email = :email",$arr);
 		
 		if (is_array($data)) {
+			// print_r($data);
 			$data = $data[0];
 			if ($data->password == $password) {
-				$_SESSION['user_id'] = $data->id;
-				$_SESSION['username'] = $data->username;
-				$_SESSION['email'] = $data->email;
-				// $_SESSION['logged_in'] = 1;
-				$_SESSION['logged_in'] = true;
+
+				// regenerate session id
+				session_regenerate_id();
+
+				$_SESSION['USER']['user_id'] = $data->id;
+				$_SESSION['USER']['username'] = $data->username;
+				$_SESSION['USER']['email'] = $data->email;
+				// $_SESSION['USER']['logged_in'] = 1;
+				$_SESSION['USER']['logged_in'] = true;
 
 				return true;
 
@@ -123,6 +128,24 @@ class User
 
 		return false;
 		
+	}
+
+
+	public function is_logged_in()
+	{
+		if (isset($_SESSION['USER'])) {
+
+			$email = $_SESSION['USER']['email'];
+
+			// read from database
+			$data =  $this->get_by_email($email);
+			
+			if (is_array($data)) {
+					return true;				
+			}
+		}
+
+		return false;
 	}
 
 
