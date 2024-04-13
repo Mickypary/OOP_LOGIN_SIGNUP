@@ -63,8 +63,36 @@ class User
 		// echo "error";
 		return $errors;
 
+	}
 
+	public function login($POST)
+	{
+		$errors = array();
 
+		$arr['email'] = trim($POST['email']);
+		$password = $POST['password'];
+
+		// read from database
+		$data =  DB::table('users')->select()->where("email = :email",$arr);
+		
+		if (is_array($data)) {
+			$data = $data[0];
+			if ($data->password == $password) {
+				$_SESSION['user_id'] = $data->id;
+				$_SESSION['username'] = $data->username;
+				$_SESSION['email'] = $data->email;
+				// $_SESSION['logged_in'] = 1;
+				$_SESSION['logged_in'] = true;
+
+				return true;
+
+			}
+			
+		}
+
+		$errors[] = "wrong email or password";
+		// echo "error";
+		return $errors;
 
 	}
 

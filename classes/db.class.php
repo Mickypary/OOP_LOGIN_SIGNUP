@@ -41,6 +41,7 @@ class DB
 
 	protected function run($values = array())
 	{
+		// print_r($values);
 		$stm = self::$con->prepare($this->query);
 		$check = $stm->execute($values);
 		if ($check) {
@@ -94,7 +95,7 @@ class DB
 				$values = array_merge($this->values, $values);
 				// print_r($values);			
 				$this->query .= " WHERE " . $where;
-				print_r($this->query);
+				// print_r($this->query);
 				return $this->run($values);
 				break;
 			

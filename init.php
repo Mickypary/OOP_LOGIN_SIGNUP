@@ -1,6 +1,6 @@
 <?php
 
-
+session_start();
 
 // autoload function
 spl_autoload_register(function ($classname) {
