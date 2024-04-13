@@ -1,3 +1,27 @@
+<?php
+
+include 'init.php';
+
+if (count($_POST) > 0) {
+	
+	$errors = User::action()->create($_POST);
+
+	if (!is_array($errors)) {
+		
+		header("Location: login.php");
+		die();
+	}
+}
+
+
+
+
+?>
+
+
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,7 +33,7 @@
 
 	<style type="text/css">
 		
-		form{
+		form {
 			
 			margin: auto;
 			margin-top: 20px;
@@ -49,14 +73,21 @@
 	<form method="POST">
 
 		<h2>Signup</h2>
+		<div style="color: red">
+			<?php if (isset($errors) && is_array($errors)): ?>
+				<?php foreach ($errors as $key => $error): ?>
+					<?php echo $error . "<br>"; ?>
+				<?php endforeach ?>
+			<?php endif ?>
+		</div>
 
-		<input class="input" type="text" name="username" placeholder="Username"> <br>
-		<input class="input" type="email" name="email" placeholder="Email"> <br>
-		<input class="input" type="password" name="password" placeholder="Password"> <br>
-		<select class="input" name="gender" style="max-width: 300px;">
+		<input class="input" type="text" name="username" value="<?= isset($_POST['username']) ? $_POST['username'] : "" ?>" placeholder="Username"> <br>
+		<input class="input" type="email" name="email" value="<?= isset($_POST['email']) ? $_POST['email'] : "" ?>" placeholder="Email"> <br>
+		<input class="input" type="password" name="password" value="<?= isset($_POST['password']) ? $_POST['password'] : "" ?>" placeholder="Password"> <br>
+		<select class="input" name="gender" style="max-width: 280px;">
 			<option value="">--Select Gender--</option>
-			<option value="Male">Male</option>
-			<option value="Female">Female</option>
+			<option value="Male" <?= isset($_POST['gender']) && $_POST['gender'] == "Male" ? "selected" : "" ?> >Male</option>
+			<option value="Female" <?= isset($_POST['gender']) && $_POST['gender'] == "Female" ? "selected" : "" ?>>Female</option>
 		</select> <br><br>
 		<input class="btn" type="submit" name="" value="Signup"> <br style="clear: both;">
 	</form>

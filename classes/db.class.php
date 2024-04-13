@@ -39,7 +39,7 @@ class DB
 		return self::$instance;
 	}
 
-	public function run($values = array())
+	protected function run($values = array())
 	{
 		$stm = self::$con->prepare($this->query);
 		$check = $stm->execute($values);
@@ -140,8 +140,7 @@ class DB
 		// print_r($this->query);
 
 		$this->values = $values;
-
-		return self::$instance;
+		$this->run($this->values);
 	}
 
 	public function update(array $values)

@@ -33,7 +33,7 @@ class User
 		$arr['date'] = date("Y-m-d H:i:s");
 
 		// validation
-		if (empty($arr['username']) || !preg_match("/^[a-zA-Z ]$/", $arr['username'])) {
+		if (empty($arr['username']) || !preg_match("/^[a-zA-Z ]+$/", $arr['username'])) {
 			
 			$errors[] = "Username can only have letters and spaces";
 		}
@@ -44,7 +44,12 @@ class User
 			$errors[] = "Please enter a valid email";
 		}
 
-		if ($arr['gender'] != "--Select Gender--" || ($arr['gender'] != "Female" && $arr['gender'] != "Male")) {
+		if (empty($arr['password']) || strlen($arr['password']) < 4) {
+					
+			$errors[] = "Password must be atleast 4 characters";
+		}
+
+		if ($arr['gender'] != "Female" && $arr['gender'] != "Male") {
 							
 			$errors[] = "Please enter a valid gender";
 		}
@@ -53,9 +58,9 @@ class User
 		// save to database
 		if (count($errors) == 0) {
 			
-			return DB::table('users')->insert($arr)->run($arr);
+			return DB::table('users')->insert($arr);
 		}
-		echo "error";
+		// echo "error";
 		return $errors;
 
 
