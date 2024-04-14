@@ -17,11 +17,11 @@ if (!$answer = $user->is_logged_in()) {
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Home Page</title>
+	<title>Shop Page</title>
 </head>
 <body>
 
-	<center>Home Page</center>
+	<center>Shop Page</center>
 	<header><a href="index.php">Home</a> . <a href="shop.php">Shop</a> . <a href="logout.php">Logout</a> . <a href="login.php">Login</a> </header>
 
 

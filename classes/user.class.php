@@ -76,18 +76,21 @@ class User
 		$data =  DB::table('users')->select()->where("email = :email",$arr);
 		
 		if (is_array($data)) {
-			// print_r($data);
 			$data = $data[0];
 			if ($data->password == $password) {
 
 				// regenerate session id
-				session_regenerate_id();
 
-				$_SESSION['USER']['user_id'] = $data->id;
-				$_SESSION['USER']['username'] = $data->username;
-				$_SESSION['USER']['email'] = $data->email;
-				// $_SESSION['USER']['logged_in'] = 1;
-				$_SESSION['USER']['logged_in'] = true;
+				$sess = new Session();
+				$sess->regenerate();
+
+				$arr['user_id'] = $data->id;
+				$arr['username'] = $data->username;
+				$arr['email'] = $data->email;
+				$arr['logged_in'] = true;
+
+				// defined function by me in session class
+				$set_session = $sess->set("USER", $arr);
 
 				return true;
 
@@ -119,7 +122,6 @@ class User
 
 		// check if column exist
 		$check = DB::table('users')->query('show columns from users');
-		echo "<pre>";
 		$all_columns = array_column($check, "Field");
 		if (in_array($column, $all_columns)) {
 			
@@ -133,9 +135,10 @@ class User
 
 	public function is_logged_in()
 	{
-		if (isset($_SESSION['USER'])) {
-
-			$email = $_SESSION['USER']['email'];
+		$sess = new Session();
+		if ($sess->exists('USER')) {
+			$data = $sess->get('USER');
+			$email = $data['email'];
 
 			// read from database
 			$data =  $this->get_by_email($email);
